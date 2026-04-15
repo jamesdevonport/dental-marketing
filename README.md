@@ -30,15 +30,21 @@ npm run cf:preview   # builds with OpenNext, runs wrangler dev
 
 ## Deploy
 
-Push to `main`. Cloudflare Workers Builds picks up the push and runs `npm run cf:build && npx wrangler deploy`.
+Push to `main`. Cloudflare Workers Builds should run a single deploy command that builds and deploys in one step.
 
 First-time setup (one-off, in the Cloudflare dashboard):
 
 1. Workers & Pages → Create → **Connect to Git** → GitHub → select `dental-marketing`
 2. Build configuration:
-   - Build command: `npm run cf:build`
-   - Deploy command: `npx wrangler deploy`
+   - Build command: leave blank
+   - Deploy command: `npm run deploy`
 3. Save & deploy.
+
+Why this matters:
+
+- `npx wrangler deploy` expects the OpenNext output to already exist in `.open-next/`
+- if Workers Builds skips or misconfigures the separate build step, deploy fails with `Could not find compiled Open Next config`
+- `npm run deploy` avoids that failure mode because it runs `opennextjs-cloudflare build && opennextjs-cloudflare deploy`
 
 From then on, every push to `main` deploys. Preview deploys are created for PRs.
 
