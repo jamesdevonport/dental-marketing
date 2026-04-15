@@ -221,6 +221,22 @@ function buildCampaigns(): Campaign[] {
 
 export const campaigns: Campaign[] = buildCampaigns();
 
+// Backfill creative.campaignIds now that campaigns exist — walks every
+// campaign's ad sets and appends the parent campaign id to each linked
+// creative. This is how the creative↔campaign many-to-many is discovered.
+for (const campaign of campaigns) {
+  for (const adSet of campaign.adSets) {
+    for (const creativeId of adSet.creativeIds) {
+      const c = creativesByClient[campaign.clientId]?.find(
+        (cr) => cr.id === creativeId,
+      );
+      if (c && !c.campaignIds.includes(campaign.id)) {
+        c.campaignIds.push(campaign.id);
+      }
+    }
+  }
+}
+
 export const campaignsByClient: Record<string, Campaign[]> = clients.reduce(
   (acc, c) => {
     acc[c.id] = campaigns.filter((cmp) => cmp.clientId === c.id);
@@ -231,4 +247,14 @@ export const campaignsByClient: Record<string, Campaign[]> = clients.reduce(
 
 export const campaignById = Object.fromEntries(
   campaigns.map((c) => [c.id, c]),
+);
+
+export const creativesByCampaign: Record<string, string[]> = campaigns.reduce(
+  (acc, c) => {
+    const ids = new Set<string>();
+    for (const s of c.adSets) for (const cid of s.creativeIds) ids.add(cid);
+    acc[c.id] = Array.from(ids);
+    return acc;
+  },
+  {} as Record<string, string[]>,
 );

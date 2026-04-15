@@ -5,6 +5,7 @@ export * from "./topics";
 export * from "./personas";
 export * from "./templates";
 export * from "./creatives";
+export * from "./lead-forms";
 export * from "./campaigns";
 export * from "./agent";
 export * from "./reports";

@@ -72,7 +72,7 @@ function TemplateInner({
             className="text-[11px] font-bold leading-tight line-clamp-3"
             style={{ fontFamily: brand.fontPrimary }}
           >
-            {creative.headline}
+            {creative.copy.headlines[0]}
           </div>
           <div className="mt-1 h-0.5 w-8" style={{ backgroundColor: brand.secondary }} />
         </div>
@@ -89,7 +89,7 @@ function TemplateInner({
             className="text-[10px] italic leading-tight line-clamp-4"
             style={{ fontFamily: brand.fontSecondary }}
           >
-            {creative.headline}
+            {creative.copy.headlines[0]}
           </div>
           <div className="flex items-center gap-1.5">
             <div
@@ -158,7 +158,7 @@ function TemplateInner({
             className="text-[11px] font-semibold leading-tight line-clamp-2"
             style={{ fontFamily: "ui-rounded, system-ui" }}
           >
-            {creative.headline}
+            {creative.copy.headlines[0]}
           </div>
           {[1, 2, 3].map((i) => (
             <div key={i} className="flex items-center gap-1.5">

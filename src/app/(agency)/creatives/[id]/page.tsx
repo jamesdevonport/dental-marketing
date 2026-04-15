@@ -26,7 +26,7 @@ export default async function CreativeDetailPage({
   return (
     <>
       <div className="border-b bg-background px-4 py-3 md:px-6">
-        <h2 className="text-lg font-semibold tracking-tight">{creative.headline}</h2>
+        <h2 className="text-lg font-semibold tracking-tight">{creative.copy.headlines[0]}</h2>
         <p className="text-xs text-muted-foreground">
           {client.name} · {template.name} · {topic.name} · {persona.name} · {creative.format}
         </p>

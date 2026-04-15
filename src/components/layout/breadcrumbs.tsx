@@ -39,7 +39,10 @@ const STATIC_LABELS: Record<string, string> = {
 function labelFor(segment: string, index: number, all: string[]): string {
   if (clientById[segment]) return clientById[segment].name;
   if (campaignById[segment]) return campaignById[segment].name;
-  if (creativeById[segment]) return creativeById[segment].headline;
+  if (creativeById[segment]) {
+    const c = creativeById[segment];
+    return c.copy.headlines[0] ?? c.name;
+  }
   if (topicById[segment]) return topicById[segment].name;
   if (STATIC_LABELS[segment]) return STATIC_LABELS[segment];
   return segment;

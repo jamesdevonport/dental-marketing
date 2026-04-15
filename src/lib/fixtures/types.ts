@@ -20,6 +20,76 @@ export type Urgency = "high" | "medium" | "low";
 
 export type PerformanceBand = "top" | "good" | "ok" | "poor" | "untested";
 
+export type CtaType =
+  | "LEARN_MORE"
+  | "BOOK_NOW"
+  | "CALL_NOW"
+  | "SIGN_UP"
+  | "REQUEST_TIME"
+  | "CONTACT_US";
+
+export type ApprovalMode = "auto" | "approve_everything" | "report_only";
+
+export type ApprovalState =
+  | "not_required"
+  | "awaiting_agency"
+  | "awaiting_client"
+  | "approved"
+  | "rejected";
+
+export type CreativeStatus =
+  | "draft"
+  | "pending_review"
+  | "approved"
+  | "live"
+  | "paused"
+  | "archived";
+
+export type DestinationType = "website" | "lead_form" | "phone_call";
+
+export type UtmParams = {
+  source: string;
+  medium: string;
+  campaign: string;
+  term?: string;
+  content?: string;
+};
+
+export type CreativeDestination =
+  | {
+      type: "website";
+      url: string;
+      displayUrl?: string;
+      utm: UtmParams;
+      pixelEventId?: string;
+    }
+  | {
+      type: "lead_form";
+      leadFormId: ID;
+      leadFormName: string;
+    }
+  | {
+      type: "phone_call";
+      phoneNumber: string;
+    };
+
+export type CreativeCopy = {
+  headlines: string[];
+  bodies: string[];
+  descriptions: string[];
+  ctaType: CtaType;
+};
+
+export type MetaPublishConfig = {
+  placements: "feed" | "stories_reels" | "both";
+  useDynamicCreative: boolean;
+  advantagePlus: {
+    standardEnhancements: boolean;
+    textGeneration: boolean;
+    textOptimizations: boolean;
+  };
+};
+
 export type BrandKit = {
   primary: string;
   secondary: string;
@@ -51,6 +121,14 @@ export type Client = {
   };
   monthlyBudget: number;
   primaryContact: { name: string; email: string; phone: string };
+  /** Agent approval policy — drives where new creatives route for review. */
+  approvalMode: ApprovalMode;
+  /** When true, creatives must also be approved by the practice after agency sign-off. */
+  clientApprovalRequired: boolean;
+  /** Preferred lead form for topics without a specific form defined. */
+  defaultLeadFormId?: ID;
+  /** Phone number used by click-to-call creatives. */
+  ctaPhoneNumber?: string;
   createdAt: string;
 };
 
@@ -90,21 +168,40 @@ export type CreativePerformance = {
 export type Creative = {
   id: ID;
   clientId: ID;
+  name: string;
   templateId: TemplateId;
   topicId: ID;
   personaId: ID;
   format: Format;
-  headline: string;
-  body: string;
-  description?: string;
-  cta: string;
-  destinationUrl: string;
-  status: "draft" | "live" | "paused" | "archived";
+  copy: CreativeCopy;
+  destination: CreativeDestination;
+  publish: MetaPublishConfig;
+  /** CDN URL for a rendered PNG, if any. Procedural thumbs leave this undefined. */
+  imageUrl?: string;
+  status: CreativeStatus;
+  approvalState: ApprovalState;
   generatedBy: "matrix" | "manual" | "ai-refresh" | "agent";
   generatedAt: string;
+  /** Campaigns this creative has been attached to (can be multiple). */
+  campaignIds: ID[];
   performance?: CreativePerformance;
   performanceBand: PerformanceBand;
-  campaignId?: ID;
+};
+
+export type LeadForm = {
+  id: ID;
+  clientId: ID;
+  name: string;
+  fields: Array<
+    | "email"
+    | "phone"
+    | "full_name"
+    | "preferred_time"
+    | "service_interest"
+  >;
+  thankYouMessage: string;
+  status: "draft" | "published";
+  createdAt: string;
 };
 
 export type AdSet = {
@@ -139,7 +236,7 @@ export type Campaign = {
 
 export type ThreadMessage = {
   id: ID;
-  author: "agent" | "user";
+  author: "agent" | "user" | "client";
   body: string;
   timestamp: string;
 };
@@ -147,7 +244,13 @@ export type ThreadMessage = {
 export type AgentProposal = {
   id: ID;
   clientId: ID;
-  actionType: "pause" | "launch" | "refresh-creative" | "budget-change" | "report";
+  actionType:
+    | "pause"
+    | "launch"
+    | "refresh-creative"
+    | "budget-change"
+    | "report"
+    | "creative-review";
   urgency: Urgency;
   headline: string;
   reasoning: string;

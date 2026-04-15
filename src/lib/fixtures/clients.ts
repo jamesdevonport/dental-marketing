@@ -41,6 +41,10 @@ export const clients: Client[] = [
       email: "hannah@brightsmiledental.co.uk",
       phone: "+44 1273 555 101",
     },
+    approvalMode: "auto",
+    clientApprovalRequired: false,
+    defaultLeadFormId: "lf-brightsmile-whitening",
+    ctaPhoneNumber: "+44 1273 555 101",
     createdAt: "2025-11-04T09:12:00Z",
   },
   {
@@ -76,6 +80,10 @@ export const clients: Client[] = [
       email: "alistair@mayfairdentalstudio.com",
       phone: "+44 20 7555 0188",
     },
+    approvalMode: "approve_everything",
+    clientApprovalRequired: true,
+    defaultLeadFormId: "lf-mayfair-veneers",
+    ctaPhoneNumber: "+44 20 7555 0188",
     createdAt: "2025-09-18T14:03:00Z",
   },
   {
@@ -120,6 +128,10 @@ export const clients: Client[] = [
       email: "sophie@northsidefamilydentistry.co.uk",
       phone: "+44 161 555 0047",
     },
+    approvalMode: "auto",
+    clientApprovalRequired: false,
+    defaultLeadFormId: "lf-northside-new-patient",
+    ctaPhoneNumber: "+44 161 555 0047",
     createdAt: "2026-01-22T11:30:00Z",
   },
   {
@@ -155,6 +167,10 @@ export const clients: Client[] = [
       email: "marco@riversideortho.co.uk",
       phone: "+44 117 555 0212",
     },
+    approvalMode: "approve_everything",
+    clientApprovalRequired: true,
+    defaultLeadFormId: "lf-riverside-invisalign",
+    ctaPhoneNumber: "+44 117 555 0212",
     createdAt: "2026-04-02T08:45:00Z",
   },
 ];
