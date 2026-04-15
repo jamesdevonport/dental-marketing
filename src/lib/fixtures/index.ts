@@ -8,7 +8,6 @@ export * from "./creatives";
 export * from "./lead-forms";
 export * from "./campaigns";
 export * from "./agent";
-export * from "./reports";
 
 import { clients } from "./clients";
 import { creatives } from "./creatives";

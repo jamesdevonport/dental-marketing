@@ -15,7 +15,6 @@ export default function ClientPortalLayout({
     { href: "/portal", label: "Home" },
     { href: "/portal/creatives", label: "Creatives" },
     { href: "/portal/performance", label: "Performance" },
-    { href: "/portal/reports", label: "Reports" },
     { href: "/portal/approvals", label: "Approvals" },
   ];
 

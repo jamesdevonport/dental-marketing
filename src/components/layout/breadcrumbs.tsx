@@ -9,6 +9,7 @@ import {
   creativeById,
   topicById,
 } from "@/lib/fixtures";
+// Note: reports section was removed — no entries for it below.
 
 const STATIC_LABELS: Record<string, string> = {
   dashboard: "Dashboard",
@@ -20,7 +21,6 @@ const STATIC_LABELS: Record<string, string> = {
   templates: "Templates",
   personas: "Personas",
   topics: "Topics",
-  reports: "Reports",
   settings: "Settings",
   account: "Account",
   team: "Team",

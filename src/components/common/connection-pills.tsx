@@ -15,11 +15,30 @@ const DOT: Record<ConnectionStatus, string> = {
 
 export function ConnectionPills({
   connections,
+  compact,
   className,
 }: {
   connections: { meta: ConnectionStatus; google: ConnectionStatus; pixel: ConnectionStatus };
+  /** Just coloured dots + short labels — fits inside list rows. */
+  compact?: boolean;
   className?: string;
 }) {
+  if (compact) {
+    return (
+      <div className={cn("inline-flex items-center gap-1", className)}>
+        {(["meta", "google", "pixel"] as const).map((key) => (
+          <span
+            key={key}
+            title={`${LABELS[key]}: ${connections[key]}`}
+            className="inline-flex items-center gap-0.5 text-[10px] text-muted-foreground"
+          >
+            <span className={cn("h-1.5 w-1.5 rounded-full", DOT[connections[key]])} />
+            {LABELS[key].charAt(0)}
+          </span>
+        ))}
+      </div>
+    );
+  }
   return (
     <div className={cn("flex items-center gap-1.5 text-[11px]", className)}>
       {(["meta", "google", "pixel"] as const).map((key) => (

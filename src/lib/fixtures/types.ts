@@ -249,7 +249,6 @@ export type AgentProposal = {
     | "launch"
     | "refresh-creative"
     | "budget-change"
-    | "report"
     | "creative-review";
   urgency: Urgency;
   headline: string;
@@ -269,7 +268,6 @@ export type AgentActivity = {
   type:
     | "insight-pull"
     | "fatigue-flag"
-    | "report-draft"
     | "proposal"
     | "action"
     | "schedule-run";
@@ -293,17 +291,6 @@ export type TeamMember = {
   email: string;
   role: "owner" | "admin" | "editor" | "viewer" | "client";
   avatarInitials: string;
-};
-
-export type Report = {
-  id: ID;
-  clientId: ID | "all";
-  type: "daily" | "weekly" | "monthly" | "custom";
-  dateRange: { start: string; end: string };
-  generatedBy: "agent" | "user";
-  status: "draft" | "sent" | "viewed";
-  generatedAt: string;
-  title: string;
 };
 
 export type Tenant = {

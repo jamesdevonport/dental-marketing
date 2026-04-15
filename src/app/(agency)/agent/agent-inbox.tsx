@@ -380,7 +380,7 @@ function ProposalDetail({ proposal }: { proposal: AgentProposal }) {
       case "launch": return PlayCircle;
       case "refresh-creative": return Sparkles;
       case "budget-change": return MoreHorizontal;
-      case "report": return Clock;
+      case "creative-review": return Sparkles;
       default: return Sparkles;
     }
   };
