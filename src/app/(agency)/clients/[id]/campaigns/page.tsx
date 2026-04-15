@@ -16,7 +16,6 @@ export default async function ClientCampaignsPage({
 
   return (
     <ComingSoon
-      phase={3}
       title={`${client.name} campaigns table`}
       description={`Meta and Google tabs. Expandable rows for ad sets and ads. ${campaigns.length} campaigns in fixtures — ${campaigns.filter((c) => c.status === "active").length} active, ${campaigns.filter((c) => c.platform === "meta").length} Meta, ${campaigns.filter((c) => c.platform === "google").length} Google.`}
       bullets={[

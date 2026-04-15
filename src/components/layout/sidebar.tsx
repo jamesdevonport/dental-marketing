@@ -6,13 +6,10 @@ import {
   BarChart3,
   Bot,
   Building2,
-  FileText,
   LayoutDashboard,
-  LayoutTemplate,
   Megaphone,
   Settings,
   Sparkles,
-  Users,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { agentProposals } from "@/lib/fixtures";
@@ -35,8 +32,6 @@ const mainItems: Item[] = [
   { href: "/clients", label: "Clients", icon: Building2 },
   { href: "/campaigns", label: "Campaigns", icon: Megaphone },
   { href: "/creatives", label: "Creatives", icon: Sparkles },
-  { href: "/templates", label: "Templates", icon: LayoutTemplate },
-  { href: "/personas", label: "Personas", icon: Users },
   { href: "/reports", label: "Reports", icon: BarChart3 },
 ];
 

@@ -15,7 +15,6 @@ export default async function ClientSettingsPage({
 
   return (
     <ComingSoon
-      phase={3}
       title="Per-client settings"
       description={`Budgets, approval rules, contacts, and notification preferences for ${client.name}. Monthly budget fixture: £${client.monthlyBudget.toLocaleString()}.`}
       bullets={[

@@ -16,7 +16,6 @@ export default async function ClientCreativesPage({
 
   return (
     <ComingSoon
-      phase={3}
       title={`Ad Directory — ${client.name}`}
       description={`Faceted filter rail + responsive grid. ${creatives.length} creatives for this client across ${new Set(creatives.map((c) => c.templateId)).size} templates and ${new Set(creatives.map((c) => c.topicId)).size} topics. This is the critical screen — how the user browses hundreds of matrix-generated ads.`}
       bullets={[

@@ -22,7 +22,6 @@ export default async function CampaignDetailPage({
         description={`${client.name} · ${campaign.platform === "meta" ? "Meta" : "Google"} · ${campaign.status}`}
       />
       <ComingSoon
-        phase={4}
         title="Campaign detail"
         description={`Ad sets → ads hierarchy, insights charts, and edit-in-place for ${campaign.name}. Currently £${campaign.spend7d.toFixed(0)} spend / ${campaign.leads7d} leads over 7d.`}
         bullets={[

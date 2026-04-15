@@ -18,7 +18,6 @@ export default function ClientsPage() {
         }
       />
       <ComingSoon
-        phase={3}
         title="Clients list with grid / list toggle"
         description="Four example clients (Bright Smile, Mayfair, Northside, Riverside) are already in fixtures — this page will render them as cards with connection health icons, 7-day spend + leads, and a status pill."
         bullets={[

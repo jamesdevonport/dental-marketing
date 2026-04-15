@@ -15,7 +15,6 @@ export default async function ClientBrandPage({
 
   return (
     <ComingSoon
-      phase={3}
       title="Brand kit editor with live preview"
       description={`Edit ${client.name}'s logo, palette, fonts, tone, and photography. Side panel shows a live-rendered ad in the Feed format that updates in real time as colours change — this is the 'money shot' of the product.`}
       bullets={[

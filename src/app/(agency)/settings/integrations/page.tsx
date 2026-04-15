@@ -5,7 +5,6 @@ export const metadata = { title: "Integrations" };
 export default function IntegrationsSettingsPage() {
   return (
     <ComingSoon
-      phase={4}
       title="Platform integrations"
       description="Meta App review status, Google Ads developer token, Gemini API key, Slack/WhatsApp delivery, Convex backups, webhook endpoints."
       bullets={[

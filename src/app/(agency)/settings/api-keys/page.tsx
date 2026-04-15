@@ -5,7 +5,6 @@ export const metadata = { title: "API keys" };
 export default function ApiKeysSettingsPage() {
   return (
     <ComingSoon
-      phase={5}
       title="API keys"
       description="Programmatic access tokens for advanced users."
     />

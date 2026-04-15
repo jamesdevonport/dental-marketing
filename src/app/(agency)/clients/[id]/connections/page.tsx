@@ -15,7 +15,6 @@ export default async function ClientConnectionsPage({
 
   return (
     <ComingSoon
-      phase={3}
       title="Connection health"
       description={`Meta / Google Ads / Pixel / Pages status for ${client.name} with OAuth re-connect flows and pixel diagnostics. Fixture status: Meta ${client.connections.meta}, Google ${client.connections.google}, Pixel ${client.connections.pixel}.`}
       bullets={[

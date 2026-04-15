@@ -11,7 +11,6 @@ export default function AgentPage() {
         description="Pending proposals, scheduled tasks, and activity from the autonomous agent."
       />
       <ComingSoon
-        phase={4}
         title="Agent approval inbox"
         description="The agent inbox lives here: a split-pane view with pending proposals on the left and the full reasoning + preview + action bar on the right. Fixtures for 7 live proposals already exist."
         bullets={[

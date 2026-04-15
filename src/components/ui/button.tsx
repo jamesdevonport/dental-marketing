@@ -65,12 +65,17 @@ function Button({
       ? (children as React.ReactElement)
       : render
 
+  // When asChild is active we are rendering a non-button element (typically
+  // an <a>), so tell Base UI not to expect a native <button>.
+  const nativeButton = asChild ? false : props.nativeButton
+
   return (
     <ButtonPrimitive
       data-slot="button"
       className={cn(buttonVariants({ variant, size, className }))}
       render={resolvedRender}
       {...props}
+      nativeButton={nativeButton}
     >
       {asChild ? undefined : children}
     </ButtonPrimitive>

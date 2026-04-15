@@ -1,5 +1,4 @@
 import { notFound } from "next/navigation";
-import { PageHeader } from "@/components/layout/page-header";
 import { ComingSoon } from "@/components/layout/coming-soon";
 import { templateById } from "@/lib/fixtures";
 
@@ -16,12 +15,11 @@ export default async function TemplateDetailPage({
 
   return (
     <>
-      <PageHeader
-        title={template.name}
-        description={template.description}
-      />
+      <div className="border-b bg-background px-4 py-3 md:px-6">
+        <h2 className="text-lg font-semibold tracking-tight">{template.name}</h2>
+        <p className="text-xs text-muted-foreground">{template.description}</p>
+      </div>
       <ComingSoon
-        phase={5}
         title={`${template.name} template detail`}
         description={`Preview in all supported formats (${template.supportedFormats.join(", ")}), variable slots, example renders with three different brands.`}
       />

@@ -1,5 +1,4 @@
 import { notFound } from "next/navigation";
-import { PageHeader } from "@/components/layout/page-header";
 import { ComingSoon } from "@/components/layout/coming-soon";
 import {
   clientById,
@@ -26,12 +25,13 @@ export default async function CreativeDetailPage({
 
   return (
     <>
-      <PageHeader
-        title={creative.headline}
-        description={`${client.name} · ${template.name} · ${topic.name} · ${persona.name} · ${creative.format}`}
-      />
+      <div className="border-b bg-background px-4 py-3 md:px-6">
+        <h2 className="text-lg font-semibold tracking-tight">{creative.headline}</h2>
+        <p className="text-xs text-muted-foreground">
+          {client.name} · {template.name} · {topic.name} · {persona.name} · {creative.format}
+        </p>
+      </div>
       <ComingSoon
-        phase={3}
         title="Creative detail"
         description="Large preview, format toggle, editable copy block, performance + variants + version history + agent notes. Usually opened as a side-panel over the Ad Directory, but deep-linkable."
         bullets={[

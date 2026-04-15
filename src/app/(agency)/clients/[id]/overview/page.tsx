@@ -16,7 +16,6 @@ export default async function ClientOverviewPage({
 
   return (
     <ComingSoon
-      phase={3}
       title="Client overview dashboard"
       description={`KPI strip, 30-day spend+leads chart, funnel, active creatives strip, recent agent activity, and connection health for ${client.name}. Current fixtures show £${summary.spend7d.toFixed(0)} spend and ${summary.leads7d} leads over the last 7 days.`}
       bullets={[

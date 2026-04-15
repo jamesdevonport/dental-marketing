@@ -16,7 +16,6 @@ export default async function ClientReportsPage({
 
   return (
     <ComingSoon
-      phase={5}
       title="Client-facing reports"
       description={`Past and draft reports for ${client.name}. ${clientReports.length} in fixtures (${clientReports.filter((r) => r.status === "draft").length} draft, ${clientReports.filter((r) => r.status === "sent").length} sent).`}
       bullets={[

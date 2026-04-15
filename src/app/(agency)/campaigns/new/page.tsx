@@ -11,7 +11,6 @@ export default function NewCampaignPage() {
         description="Create a Meta or Google campaign from scratch."
       />
       <ComingSoon
-        phase={4}
         title="Campaign builder wizard (6 steps)"
         description="Mirrors the Meta API hierarchy: objective → name & budget → ad sets → creatives → tracking → review."
         bullets={[

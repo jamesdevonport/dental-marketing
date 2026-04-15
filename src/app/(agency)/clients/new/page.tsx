@@ -11,7 +11,6 @@ export default function NewClientPage() {
         description="An 8-step wizard to get a dental practice from zero to launch-ready."
       />
       <ComingSoon
-        phase={3}
         title="Client onboarding wizard (8 steps)"
         description="Step-by-step: basics → brand kit → services/topics → audience/personas → budget/goals → connect accounts → agent preferences → review & launch."
         bullets={[

@@ -12,7 +12,6 @@ export default function ReportsPage() {
         description="Agency-level reporting."
       />
       <ComingSoon
-        phase={5}
         title="Reports list"
         description={`${reports.length} reports in fixtures. List view: date, type (Daily / Weekly / Monthly / Custom), clients covered, generated-by (agent / manual), status, actions.`}
         bullets={[

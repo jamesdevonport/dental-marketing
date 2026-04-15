@@ -5,7 +5,6 @@ export const metadata = { title: "Your ads" };
 export default function PortalHomePage() {
   return (
     <ComingSoon
-      phase={5}
       title="Client portal home"
       description="The dental practice view. One big number: 'You got X new patient enquiries this month from ads.' Chart over time. Cost-per-enquiry. Top 3 ads as thumbnails."
       bullets={[

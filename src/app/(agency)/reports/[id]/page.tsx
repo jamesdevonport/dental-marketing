@@ -18,7 +18,6 @@ export default async function ReportDetailPage({
     <>
       <PageHeader title={report.title} />
       <ComingSoon
-        phase={5}
         title="Report document view"
         description="Renders like a client-safe document — hero metrics, chart block, creative highlights (top 3 + worst 3), agent commentary, next-week recommendations, appendix with ad-level data. Presentation mode toggle strips chrome."
       />

@@ -6,7 +6,6 @@ export const metadata = { title: "Agent config" };
 export default function AgentSettingsPage() {
   return (
     <ComingSoon
-      phase={4}
       title="Agent configuration & guardrails"
       description={`Global approval mode default, per-action thresholds, scheduled tasks, and guardrails. ${scheduledTasks.length} scheduled tasks in fixtures.`}
       bullets={[

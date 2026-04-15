@@ -5,7 +5,6 @@ export const metadata = { title: "Reports" };
 export default function PortalReportsPage() {
   return (
     <ComingSoon
-      phase={5}
       title="Past reports (client view)"
       description="Archive of previous monthly / weekly reports. Read-only. PDF export."
     />

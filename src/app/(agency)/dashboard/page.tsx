@@ -9,8 +9,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { MetricDelta } from "@/components/common/metric-delta";
-import { UrgencyPill } from "@/components/common/urgency-pill";
 import { Sparkline } from "@/components/common/sparkline";
+import { cn } from "@/lib/utils";
 import { CreativeThumbnail } from "@/components/creative/thumbnail";
 import {
   aggregateLast7Days,
@@ -270,27 +270,48 @@ function ProposalRow({ proposalId }: { proposalId: string }) {
   const p = agentProposals.find((x) => x.id === proposalId)!;
   const client = clientById[p.clientId];
 
+  const urgencyBar =
+    p.urgency === "high"
+      ? "bg-destructive"
+      : p.urgency === "medium"
+        ? "bg-warning"
+        : "bg-muted-foreground/30";
+
+  const urgencyLabel =
+    p.urgency === "high"
+      ? "text-destructive"
+      : p.urgency === "medium"
+        ? "text-warning-foreground"
+        : "text-muted-foreground";
+
   return (
     <Link
       href={`/agent?proposal=${p.id}`}
-      className="flex items-start gap-3 py-3"
+      className="flex items-stretch gap-3 py-3"
     >
-      <UrgencyPill urgency={p.urgency} className="mt-0.5" />
       <span
-        className="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-sm text-[10px] font-semibold text-white"
+        aria-hidden
+        className={cn("w-1 shrink-0 self-stretch rounded-full", urgencyBar)}
+      />
+      <span
+        className="mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-sm text-[10px] font-semibold text-white"
         style={{ backgroundColor: client.brand.primary }}
       >
         {client.logoInitials}
       </span>
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center justify-between gap-2">
+      <div className="min-w-0 flex-1">
+        <div className="flex items-baseline justify-between gap-2">
           <div className="truncate text-sm font-medium">{p.headline}</div>
-          <time className="text-xs text-muted-foreground shrink-0">
+          <time className="shrink-0 text-xs text-muted-foreground">
             {relativeTime(p.createdAt)}
           </time>
         </div>
-        <div className="mt-0.5 text-xs text-muted-foreground">
-          {client.name} · {p.actionType.replace("-", " ")}
+        <div className="mt-0.5 flex items-center gap-1.5 text-xs text-muted-foreground">
+          <span className="truncate">{client.name}</span>
+          <span aria-hidden>·</span>
+          <span className="capitalize">{p.actionType.replace("-", " ")}</span>
+          <span aria-hidden>·</span>
+          <span className={cn("capitalize", urgencyLabel)}>{p.urgency} urgency</span>
         </div>
       </div>
     </Link>
