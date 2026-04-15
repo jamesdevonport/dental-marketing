@@ -1,36 +1,69 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Dental Marketing
 
-## Getting Started
+AI-powered ad campaign system for dental marketing agencies. Currently a **clickable wireframe** — UI iteration phase, no backend logic yet.
 
-First, run the development server:
+## Source of truth
+
+UI spec: `../ui-plan-dental-ads-portal.md` (outside this repo)
+
+## Stack
+
+- Next.js 16 · App Router · TypeScript
+- Tailwind v4 · shadcn/ui (base-nova preset, Base UI primitives)
+- Lucide icons · Recharts
+- `@opennextjs/cloudflare` → Cloudflare Workers Builds (GitHub-driven deploy)
+
+## Local dev
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev       # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Fixture data lives in `src/lib/fixtures/`. No backend, no auth — navigation is the wireframe.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Local Cloudflare preview (optional)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run cf:preview   # builds with OpenNext, runs wrangler dev
+```
 
-## Learn More
+## Deploy
 
-To learn more about Next.js, take a look at the following resources:
+Push to `main`. Cloudflare Workers Builds picks up the push and runs `npm run cf:build && npx wrangler deploy`.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+First-time setup (one-off, in the Cloudflare dashboard):
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. Workers & Pages → Create → **Connect to Git** → GitHub → select `dental-marketing`
+2. Build configuration:
+   - Build command: `npm run cf:build`
+   - Deploy command: `npx wrangler deploy`
+3. Save & deploy.
 
-## Deploy on Vercel
+From then on, every push to `main` deploys. Preview deploys are created for PRs.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Structure
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+src/
+  app/
+    (agency)/       Agency workspace — sidebar + top bar shell
+    (client)/       Dental practice portal (read-only)
+    (auth)/         Login / signup / OAuth callbacks
+  components/
+    ui/             shadcn components
+    layout/         Sidebar, top bar, breadcrumbs, client switcher
+    creative/       Procedural creative thumbnail (no imagery deps)
+    common/         Cross-cutting bits (delta chip, urgency pill, sparkline)
+  lib/
+    fixtures/       Hardcoded tenant + clients + creatives + agent proposals
+    format.ts       Currency / percent / relative-time helpers
+    utils.ts        cn() merge helper
+```
+
+## Design notes
+
+- Neutral slate + indigo accent. One-file rebrand via `src/app/globals.css`.
+- Per-client brand kits ARE expected to look different — shown in fixtures.
+- No CW Marketing assets — this is a different domain.
+- All creative thumbnails are procedural, not imported imagery.
