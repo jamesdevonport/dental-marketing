@@ -5,8 +5,7 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 
 const TABS = [
-  { href: "/creatives", label: "Ad directory" },
-  { href: "/creatives/brand", label: "Brand" },
+  { href: "/creatives", label: "All creatives" },
   { href: "/creatives/templates", label: "Templates" },
   { href: "/creatives/personas", label: "Personas" },
   { href: "/creatives/topics", label: "Topics" },
@@ -17,7 +16,7 @@ export function CreativesNav() {
 
   function isActive(href: string): boolean {
     if (href === "/creatives") {
-      // Ad directory is active for /creatives root and creative detail / new pages,
+      // All creatives is active for /creatives root and creative detail / new pages,
       // but not for the other top-level tabs.
       return !TABS.slice(1).some((t) => pathname.startsWith(t.href));
     }

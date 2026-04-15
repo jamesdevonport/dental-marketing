@@ -66,16 +66,23 @@ export function AdDirectoryGrid({
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const queryString = searchParams.toString();
 
-  const filters: Record<FilterKey, Set<string>> = {
-    format: parseList(searchParams.get("format")),
-    template: parseList(searchParams.get("template")),
-    topic: parseList(searchParams.get("topic")),
-    persona: parseList(searchParams.get("persona")),
-    approval: parseList(searchParams.get("approval")),
-    status: parseList(searchParams.get("status")),
-    client: parseList(searchParams.get("client")),
-  };
+  const filters: Record<FilterKey, Set<string>> = useMemo(
+    () => {
+      const currentParams = new URLSearchParams(queryString);
+      return {
+        format: parseList(currentParams.get("format")),
+        template: parseList(currentParams.get("template")),
+        topic: parseList(currentParams.get("topic")),
+        persona: parseList(currentParams.get("persona")),
+        approval: parseList(currentParams.get("approval")),
+        status: parseList(currentParams.get("status")),
+        client: parseList(currentParams.get("client")),
+      };
+    },
+    [queryString],
+  );
   const sort = searchParams.get("sort") ?? "newest";
   const view = (searchParams.get("view") ?? "grid") as "grid" | "list";
   const matrixOpen = searchParams.get("matrix") === "open";
@@ -228,6 +235,7 @@ export function AdDirectoryGrid({
 
   const hasAnyFilter =
     Object.values(filters).some((s) => s.size > 0) || sort !== "newest";
+  const isCrossClient = scope.kind === "cross-client";
 
   return (
     <>
@@ -240,6 +248,12 @@ export function AdDirectoryGrid({
           onChange={onFacetChange}
         />
         <div className="min-w-0 flex-1 space-y-3">
+          {isCrossClient ? (
+            <div className="rounded-lg border bg-muted/20 px-3 py-2 text-xs text-muted-foreground">
+              Reviewing across all clients. Open a client to manage its brand,
+              campaigns, approvals, and creative production in context.
+            </div>
+          ) : null}
           {/* Top toolbar */}
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div className="flex items-center gap-2">
@@ -291,7 +305,7 @@ export function AdDirectoryGrid({
                 />
               </div>
               <Button size="sm" onClick={() => setMatrix(true)}>
-                <Sparkles className="h-3.5 w-3.5" /> Generate
+                <Sparkles className="h-3.5 w-3.5" /> {isCrossClient ? "Generate for client" : "Generate"}
               </Button>
             </div>
           </div>
@@ -327,7 +341,11 @@ export function AdDirectoryGrid({
             <EmptyState
               icon={<Grid2x2 className="h-4 w-4" />}
               title="No creatives match these filters"
-              description="Loosen a facet or clear filters to see more."
+              description={
+                isCrossClient
+                  ? "Loosen a facet, clear filters, or switch into a client workspace to manage one practice."
+                  : "Loosen a facet or clear filters to see more."
+              }
               action={
                 hasAnyFilter ? (
                   <Button size="sm" variant="outline" onClick={() => router.replace(pathname)}>
@@ -335,7 +353,7 @@ export function AdDirectoryGrid({
                   </Button>
                 ) : (
                   <Button size="sm" onClick={() => setMatrix(true)}>
-                    <Sparkles className="h-3.5 w-3.5" /> Generate creatives
+                    <Sparkles className="h-3.5 w-3.5" /> {isCrossClient ? "Generate for client" : "Generate creatives"}
                   </Button>
                 )
               }
@@ -347,18 +365,23 @@ export function AdDirectoryGrid({
                 <CreativeTile
                   key={c.id}
                   creative={c}
+                  detailHref={
+                    isCrossClient
+                      ? `/creatives/${c.id}`
+                      : `/clients/${c.clientId}/creatives/${c.id}`
+                  }
                   selected={selected.has(c.id)}
                   onToggleSelect={() => toggleSelected(c.id)}
-                  showClient={scope.kind === "cross-client"}
+                  showClient={isCrossClient}
                 />
               ))}
             </div>
           ) : (
             <CreativeList
               creatives={sorted}
+              crossClient={isCrossClient}
               selected={selected}
               toggleSelected={toggleSelected}
-              showClient={scope.kind === "cross-client"}
             />
           )}
         </div>
@@ -374,11 +397,13 @@ export function AdDirectoryGrid({
 
 function CreativeTile({
   creative,
+  detailHref,
   selected,
   onToggleSelect,
   showClient,
 }: {
   creative: Creative;
+  detailHref: string;
   selected: boolean;
   onToggleSelect: () => void;
   showClient: boolean;
@@ -430,14 +455,14 @@ function CreativeTile({
           </div>
         ) : null}
 
-        <Link href={`/creatives/${creative.id}`} className="block">
+        <Link href={detailHref} className="block">
           <CreativeThumbnail creative={creative} size="md" className="w-full max-w-none" />
         </Link>
       </div>
 
       <div className="mt-2 space-y-1.5 px-0.5">
         <Link
-          href={`/creatives/${creative.id}`}
+          href={detailHref}
           className="block line-clamp-2 text-[13px] font-medium leading-tight hover:text-primary"
         >
           {creative.copy.headlines[0]}
@@ -475,14 +500,14 @@ function CreativeTile({
 
 function CreativeList({
   creatives,
+  crossClient,
   selected,
   toggleSelected,
-  showClient,
 }: {
   creatives: Creative[];
+  crossClient: boolean;
   selected: Set<string>;
   toggleSelected: (id: string) => void;
-  showClient: boolean;
 }) {
   return (
     <div className="overflow-x-auto rounded-md border">
@@ -492,7 +517,7 @@ function CreativeList({
             <th className="w-8 px-2 py-2" />
             <th className="w-[90px] px-2 py-2" />
             <th className="px-2 py-2 font-medium">Headline</th>
-            {showClient ? <th className="px-2 py-2 font-medium">Client</th> : null}
+            {crossClient ? <th className="px-2 py-2 font-medium">Client</th> : null}
             <th className="px-2 py-2 font-medium">Template</th>
             <th className="px-2 py-2 font-medium">Topic</th>
             <th className="px-2 py-2 font-medium">Persona</th>
@@ -506,6 +531,9 @@ function CreativeList({
         <tbody>
           {creatives.map((c) => {
             const client = clientById[c.clientId];
+            const detailHref = crossClient
+              ? `/creatives/${c.id}`
+              : `/clients/${c.clientId}/creatives/${c.id}`;
             return (
               <tr key={c.id} className="border-b last:border-b-0 hover:bg-muted/30">
                 <td className="px-2 py-2">
@@ -517,19 +545,19 @@ function CreativeList({
                   />
                 </td>
                 <td className="px-2 py-2">
-                  <Link href={`/creatives/${c.id}`}>
+                  <Link href={detailHref}>
                     <CreativeThumbnail creative={c} size="sm" className="w-[72px]" />
                   </Link>
                 </td>
                 <td className="px-2 py-2">
                   <Link
-                    href={`/creatives/${c.id}`}
+                    href={detailHref}
                     className="line-clamp-2 text-sm font-medium hover:text-primary"
                   >
                     {c.copy.headlines[0]}
                   </Link>
                 </td>
-                {showClient ? (
+                {crossClient ? (
                   <td className="px-2 py-2">
                     <span className="inline-flex items-center gap-1.5">
                       <span

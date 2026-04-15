@@ -53,7 +53,7 @@ export default function DashboardPage() {
               <Link href="/agent">Agent inbox</Link>
             </Button>
             <Button size="sm" asChild>
-              <Link href="/creatives/new">Generate creatives</Link>
+              <Link href="/creatives?matrix=open">Generate batch</Link>
             </Button>
           </>
         }

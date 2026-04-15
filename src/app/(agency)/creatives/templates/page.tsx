@@ -18,8 +18,8 @@ export default function TemplatesPage() {
     <div className="p-4 md:p-6">
       <div className="mb-4 flex items-center justify-between gap-2">
         <p className="text-sm text-muted-foreground max-w-xl">
-          Templates are the layout skeletons the matrix generator fills with
-          copy and brand colours. Each template supports specific placements.
+          Shared layout skeletons for every client. The matrix generator fills
+          these with client brand values and per-creative copy.
         </p>
         <Button size="sm" variant="outline" asChild>
           <Link href="/creatives/templates/new">Request custom template</Link>

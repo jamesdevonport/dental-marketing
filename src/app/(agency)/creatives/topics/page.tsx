@@ -15,8 +15,9 @@ export default function TopicsPage() {
     <div className="p-4 md:p-6">
       <div className="mb-4 flex items-center justify-between gap-2">
         <p className="text-sm text-muted-foreground max-w-xl">
-          Dental services. Each topic gets its own copy variants and is selectable
-          per client. The matrix generator multiplies topics × personas × templates.
+          Shared service categories for the agency. Clients choose which topics
+          are active for them in their own workspace, then the matrix generator
+          combines those with personas and templates.
         </p>
         <Button size="sm" variant="outline">
           <Plus className="h-3.5 w-3.5" /> New topic

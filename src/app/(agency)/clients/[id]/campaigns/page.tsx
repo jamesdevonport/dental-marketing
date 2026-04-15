@@ -86,19 +86,21 @@ export default async function ClientCampaignsPage({
         </Button>
       </div>
 
-      {/* Platform tabs */}
-      <div className="flex gap-1 border-b -mb-px">
-        <PlatformTab label="All" count={counts.all} to={platformHref(id, "all", status)} active={platform === "all"} />
-        <PlatformTab label="Meta" count={counts.meta} to={platformHref(id, "meta", status)} active={platform === "meta"} />
-        <PlatformTab label="Google" count={counts.google} to={platformHref(id, "google", status)} active={platform === "google"} />
-      </div>
+      <div className="space-y-3">
+        {/* Platform tabs */}
+        <div className="flex gap-1 border-b -mb-px">
+          <PlatformTab label="All" count={counts.all} to={platformHref(id, "all", status)} active={platform === "all"} />
+          <PlatformTab label="Meta" count={counts.meta} to={platformHref(id, "meta", status)} active={platform === "meta"} />
+          <PlatformTab label="Google" count={counts.google} to={platformHref(id, "google", status)} active={platform === "google"} />
+        </div>
 
-      {/* Status pills */}
-      <div className="flex flex-wrap gap-1.5">
-        <StatusPill label="All" count={all.filter((c) => platform === "all" || c.platform === platform).length} to={statusHref(id, platform, "all")} active={status === "all"} />
-        <StatusPill label="Active" count={all.filter((c) => (platform === "all" || c.platform === platform) && c.status === "active").length} to={statusHref(id, platform, "active")} active={status === "active"} />
-        <StatusPill label="Paused" count={all.filter((c) => (platform === "all" || c.platform === platform) && c.status === "paused").length} to={statusHref(id, platform, "paused")} active={status === "paused"} />
-        <StatusPill label="Draft" count={all.filter((c) => (platform === "all" || c.platform === platform) && c.status === "draft").length} to={statusHref(id, platform, "draft")} active={status === "draft"} />
+        {/* Status pills */}
+        <div className="flex flex-wrap gap-1.5 pt-2">
+          <StatusPill label="All" count={all.filter((c) => platform === "all" || c.platform === platform).length} to={statusHref(id, platform, "all")} active={status === "all"} />
+          <StatusPill label="Active" count={all.filter((c) => (platform === "all" || c.platform === platform) && c.status === "active").length} to={statusHref(id, platform, "active")} active={status === "active"} />
+          <StatusPill label="Paused" count={all.filter((c) => (platform === "all" || c.platform === platform) && c.status === "paused").length} to={statusHref(id, platform, "paused")} active={status === "paused"} />
+          <StatusPill label="Draft" count={all.filter((c) => (platform === "all" || c.platform === platform) && c.status === "draft").length} to={statusHref(id, platform, "draft")} active={status === "draft"} />
+        </div>
       </div>
 
       <Card className="p-0">
@@ -185,10 +187,11 @@ function StatusPill({ label, count, to, active }: { label: string; count: number
 
 function CampaignRow({ campaign }: { campaign: Campaign }) {
   const adsCount = campaign.adSets.reduce((s, a) => s + a.creativeIds.length, 0);
+  const href = `/clients/${campaign.clientId}/campaigns/${campaign.id}`;
   return (
     <tr className="border-b last:border-b-0 hover:bg-muted/30">
       <td className="py-2.5 pl-4 pr-3">
-        <Link href={`/campaigns/${campaign.id}`} className="block">
+        <Link href={href} className="block">
           <div className="font-medium">{campaign.name}</div>
           <div className="text-[11px] text-muted-foreground">
             {campaign.adSets.length} ad set{campaign.adSets.length === 1 ? "" : "s"} · {adsCount} ads ·{" "}
@@ -215,7 +218,7 @@ function CampaignRow({ campaign }: { campaign: Campaign }) {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuItem asChild>
-              <Link href={`/campaigns/${campaign.id}`}>View detail</Link>
+              <Link href={href}>View detail</Link>
             </DropdownMenuItem>
             <DropdownMenuItem>Edit</DropdownMenuItem>
             <DropdownMenuItem>Duplicate</DropdownMenuItem>

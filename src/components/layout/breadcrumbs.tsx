@@ -17,7 +17,6 @@ const STATIC_LABELS: Record<string, string> = {
   clients: "Clients",
   new: "New",
   campaigns: "Campaigns",
-  creatives: "Creatives",
   templates: "Templates",
   personas: "Personas",
   topics: "Topics",
@@ -44,6 +43,12 @@ function labelFor(segment: string, index: number, all: string[]): string {
     return c.copy.headlines[0] ?? c.name;
   }
   if (topicById[segment]) return topicById[segment].name;
+  if (segment === "creatives") {
+    return all[0] === "clients" ? "Creatives" : "Library";
+  }
+  if (segment === "brand" && all[0] === "creatives") {
+    return "Brand kits";
+  }
   if (STATIC_LABELS[segment]) return STATIC_LABELS[segment];
   return segment;
 }

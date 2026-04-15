@@ -88,34 +88,36 @@ export default async function CampaignsPage({
         }
       />
       <div className="space-y-4 p-4 md:p-6">
-        {/* Platform tabs */}
-        <div className="flex gap-1 border-b -mb-px">
-          <PlatformTab label="Meta" count={counts.platform.meta} platform="meta" current={platform} status={status} />
-          <PlatformTab label="Google" count={counts.platform.google} platform="google" current={platform} status={status} />
-          <PlatformTab label="All" count={counts.platform.all} platform="all" current={platform} status={status} />
-        </div>
-
-        {/* Status filter pills + summary */}
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div className="flex flex-wrap items-center gap-1.5">
-            <StatusPill label="Active" count={counts.status.active} status="active" current={status} platform={platform} />
-            <StatusPill label="Paused" count={counts.status.paused} status="paused" current={status} platform={platform} />
-            <StatusPill label="Draft" count={counts.status.draft} status="draft" current={status} platform={platform} />
-            <StatusPill label="All" count={counts.status.all} status="all" current={status} platform={platform} />
+        <div className="space-y-3">
+          {/* Platform tabs */}
+          <div className="flex gap-1 border-b -mb-px">
+            <PlatformTab label="Meta" count={counts.platform.meta} platform="meta" current={platform} status={status} />
+            <PlatformTab label="Google" count={counts.platform.google} platform="google" current={platform} status={status} />
+            <PlatformTab label="All" count={counts.platform.all} platform="all" current={platform} status={status} />
           </div>
-          <div className="flex items-center gap-4 text-xs text-muted-foreground tabular-nums">
-            <span>
-              <span className="text-foreground font-medium">{filtered.length}</span> campaigns
-            </span>
-            <span>
-              Spend 7d <span className="text-foreground font-medium">{gbp(summary.spend)}</span>
-            </span>
-            <span>
-              Leads 7d <span className="text-foreground font-medium">{num(summary.leads)}</span>
-            </span>
-            <span>
-              Avg CPL <span className="text-foreground font-medium">{summary.leads > 0 ? gbp(avgCpl, true) : "—"}</span>
-            </span>
+
+          {/* Status filter pills + summary */}
+          <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
+            <div className="flex flex-wrap items-center gap-1.5">
+              <StatusPill label="Active" count={counts.status.active} status="active" current={status} platform={platform} />
+              <StatusPill label="Paused" count={counts.status.paused} status="paused" current={status} platform={platform} />
+              <StatusPill label="Draft" count={counts.status.draft} status="draft" current={status} platform={platform} />
+              <StatusPill label="All" count={counts.status.all} status="all" current={status} platform={platform} />
+            </div>
+            <div className="flex items-center gap-4 text-xs text-muted-foreground tabular-nums">
+              <span>
+                <span className="text-foreground font-medium">{filtered.length}</span> campaigns
+              </span>
+              <span>
+                Spend 7d <span className="text-foreground font-medium">{gbp(summary.spend)}</span>
+              </span>
+              <span>
+                Leads 7d <span className="text-foreground font-medium">{num(summary.leads)}</span>
+              </span>
+              <span>
+                Avg CPL <span className="text-foreground font-medium">{summary.leads > 0 ? gbp(avgCpl, true) : "—"}</span>
+              </span>
+            </div>
           </div>
         </div>
 

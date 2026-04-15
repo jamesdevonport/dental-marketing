@@ -157,7 +157,7 @@ export default async function ClientOverviewPage({
                 {liveCreatives.slice(0, 8).map((c) => (
                   <Link
                     key={c.id}
-                    href={`/creatives/${c.id}`}
+                    href={`/clients/${id}/creatives/${c.id}`}
                     className="flex w-[130px] shrink-0 flex-col gap-1.5"
                   >
                     <CreativeThumbnail creative={c} size="sm" />

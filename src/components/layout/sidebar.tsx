@@ -4,11 +4,11 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   Bot,
+  BookOpen,
   Building2,
   LayoutDashboard,
   Megaphone,
   Settings,
-  Sparkles,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { agentProposals } from "@/lib/fixtures";
@@ -30,7 +30,7 @@ const mainItems: Item[] = [
   },
   { href: "/clients", label: "Clients", icon: Building2 },
   { href: "/campaigns", label: "Campaigns", icon: Megaphone },
-  { href: "/creatives", label: "Creatives", icon: Sparkles },
+  { href: "/creatives", label: "Library", icon: BookOpen },
 ];
 
 const footerItems: Item[] = [

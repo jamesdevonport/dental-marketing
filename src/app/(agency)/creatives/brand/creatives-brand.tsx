@@ -1,68 +1,34 @@
 "use client";
 
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { BrandEditor } from "@/components/creative/brand-editor";
-import { clients, clientById } from "@/lib/fixtures";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { clients } from "@/lib/fixtures";
 
 export function CreativesBrand() {
-  const router = useRouter();
-  const pathname = usePathname();
-  const sp = useSearchParams();
-
-  const paramId = sp.get("client");
-  const selectedId =
-    paramId && clientById[paramId] ? paramId : clients[0]?.id ?? "";
-  const client = clientById[selectedId];
-
-  const setClient = (id: string) => {
-    const next = new URLSearchParams(sp.toString());
-    if (id === clients[0]?.id) next.delete("client");
-    else next.set("client", id);
-    router.replace(next.toString() ? `${pathname}?${next.toString()}` : pathname);
-  };
-
   return (
-    <>
-      <div className="flex items-center justify-between gap-3 border-b bg-background px-4 py-3 md:px-6">
-        <div className="flex items-center gap-3 text-sm">
-          <span className="text-muted-foreground">Editing brand for</span>
-          <Select
-            value={selectedId}
-            onValueChange={(v: string | null) => { if (v) setClient(v); }}
-          >
-            <SelectTrigger className="h-8 w-[240px]">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {clients.map((c) => (
-                <SelectItem key={c.id} value={c.id}>
-                  <span className="flex items-center gap-2">
-                    <span
-                      className="grid h-4 w-4 place-items-center rounded-sm text-[9px] font-semibold text-white"
-                      style={{ backgroundColor: c.brand.primary }}
-                    >
-                      {c.logoInitials}
-                    </span>
-                    <span>{c.name}</span>
-                  </span>
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-        <span className="text-xs text-muted-foreground">
-          Brand kits feed the matrix generator — colours, fonts, tone, and
-          library images flow through to every generated ad.
-        </span>
-      </div>
-      {client ? <BrandEditor key={client.id} client={client} /> : null}
-    </>
+    <div className="space-y-4 p-4 md:p-6">
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-sm font-medium">Brand kits live on each client</CardTitle>
+          <p className="text-sm text-muted-foreground">
+            The shared library no longer owns brand editing. Open a client to
+            manage its colours, typography, tone, and image library in context
+            with that practice&apos;s campaigns and creatives.
+          </p>
+        </CardHeader>
+        <CardContent className="flex flex-wrap gap-2">
+          {clients.map((client) => (
+            <Button key={client.id} variant="outline" size="sm" asChild>
+              <Link href={`/clients/${client.id}/brand`}>
+                {client.name}
+                <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+            </Button>
+          ))}
+        </CardContent>
+      </Card>
+    </div>
   );
 }

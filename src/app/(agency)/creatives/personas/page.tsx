@@ -14,8 +14,8 @@ export default function PersonasPage() {
     <div className="p-4 md:p-6">
       <div className="mb-4 flex items-center justify-between gap-2">
         <p className="text-sm text-muted-foreground max-w-xl">
-          Personas inform the copy-synthesis side of the matrix. Each persona
-          carries tone adjustments and likely concerns.
+          Shared audience definitions for the whole agency. Clients opt into the
+          personas that matter to them inside their own workspace.
         </p>
         <Button size="sm" variant="outline">
           <Plus className="h-3.5 w-3.5" /> New persona

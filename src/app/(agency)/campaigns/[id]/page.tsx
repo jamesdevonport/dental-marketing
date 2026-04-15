@@ -1,7 +1,9 @@
 import { notFound } from "next/navigation";
 import { PageHeader } from "@/components/layout/page-header";
-import { ComingSoon } from "@/components/layout/coming-soon";
 import { campaignById, clientById } from "@/lib/fixtures";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { CampaignDetailView } from "./campaign-detail";
 
 export const metadata = { title: "Campaign" };
 
@@ -20,17 +22,15 @@ export default async function CampaignDetailPage({
       <PageHeader
         title={campaign.name}
         description={`${client.name} · ${campaign.platform === "meta" ? "Meta" : "Google"} · ${campaign.status}`}
+        actions={
+          <Button size="sm" variant="outline" asChild>
+            <Link href={`/clients/${client.id}/campaigns/${campaign.id}`}>
+              Open in client workspace
+            </Link>
+          </Button>
+        }
       />
-      <ComingSoon
-        title="Campaign detail"
-        description={`Ad sets → ads hierarchy, insights charts, and edit-in-place for ${campaign.name}. Currently £${campaign.spend7d.toFixed(0)} spend / ${campaign.leads7d} leads over 7d.`}
-        bullets={[
-          "Ad sets list with expandable ad rows",
-          "Insights tabs: delivery, demographics, placements, creative breakdown",
-          "Edit-in-place for budgets, schedules, targeting",
-          "Agent notes inline (fatigue warnings, proposed changes)",
-        ]}
-      />
+      <CampaignDetailView campaign={campaign} scope="cross-client" />
     </>
   );
 }
