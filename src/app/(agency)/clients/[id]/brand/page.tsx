@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { ClientBrand } from "./client-brand";
+import { BrandEditor } from "@/components/creative/brand-editor";
 import { clientById } from "@/lib/fixtures";
 
 export const metadata = { title: "Brand" };
@@ -12,5 +12,5 @@ export default async function ClientBrandPage({
   const { id } = await params;
   const client = clientById[id];
   if (!client) notFound();
-  return <ClientBrand client={client} />;
+  return <BrandEditor client={client} />;
 }

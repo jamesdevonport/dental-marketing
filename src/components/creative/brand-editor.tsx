@@ -1,13 +1,20 @@
 "use client";
 
 import { useState } from "react";
-import { History, Save, Wand2 } from "lucide-react";
+import {
+  History,
+  Image as ImageIcon,
+  Plus,
+  Save,
+  Trash2,
+  Upload,
+  Wand2,
+} from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
@@ -15,6 +22,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/ui/tabs";
 import { BrandPreviewCard } from "@/components/common/brand-preview-card";
 import { cn } from "@/lib/utils";
 import type { BrandKit, Client, Tone } from "@/lib/fixtures";
@@ -36,9 +49,36 @@ const FONT_OPTIONS = [
   "IBM Plex Sans",
 ];
 
-export function ClientBrand({ client }: { client: Client }) {
+type ImageCategory = "interior" | "team" | "treatments" | "patients" | "other";
+
+const CATEGORIES: { key: ImageCategory; label: string; description: string }[] = [
+  { key: "interior", label: "Practice interior", description: "Reception, treatment rooms, waiting area." },
+  { key: "team", label: "Team", description: "Dentists, hygienists, receptionists." },
+  { key: "treatments", label: "Treatments", description: "Before/after shots, procedure images." },
+  { key: "patients", label: "Patients", description: "Consented patient photos." },
+  { key: "other", label: "Other", description: "Anything that doesn't fit elsewhere." },
+];
+
+/**
+ * Procedural mock library. In production this comes from the client's uploaded
+ * image assets. For the wireframe we seed each category with a plausible count.
+ */
+function mockLibrary(client: Client): Record<ImageCategory, string[]> {
+  const seed = [...client.id].reduce((n, c) => n + c.charCodeAt(0), 0);
+  const rnd = (n: number, max: number) => ((seed * (n + 7)) % max) + 2;
+  return {
+    interior: Array.from({ length: rnd(1, 6) }, (_, i) => `int-${i}`),
+    team: Array.from({ length: rnd(2, 5) }, (_, i) => `team-${i}`),
+    treatments: Array.from({ length: rnd(3, 7) }, (_, i) => `trt-${i}`),
+    patients: Array.from({ length: rnd(4, 4) }, (_, i) => `pat-${i}`),
+    other: Array.from({ length: rnd(5, 3) }, (_, i) => `oth-${i}`),
+  };
+}
+
+export function BrandEditor({ client }: { client: Client }) {
   const [brand, setBrand] = useState<BrandKit>(client.brand);
   const [dirty, setDirty] = useState(false);
+  const [library, setLibrary] = useState(() => mockLibrary(client));
 
   const patch = (p: Partial<BrandKit>) => {
     setBrand((b) => ({ ...b, ...p }));
@@ -47,6 +87,7 @@ export function ClientBrand({ client }: { client: Client }) {
 
   const reset = () => {
     setBrand(client.brand);
+    setLibrary(mockLibrary(client));
     setDirty(false);
     toast.info("Reverted to saved brand.");
   };
@@ -56,9 +97,27 @@ export function ClientBrand({ client }: { client: Client }) {
     setDirty(false);
   };
 
-  const extractFromLogo = () => {
+  const extractFromLogo = () =>
     toast.info("Extracting palette from logo… (wireframe)");
+
+  const addImage = (category: ImageCategory) => {
+    setLibrary((l) => ({
+      ...l,
+      [category]: [...l[category], `${category}-${Date.now()}`],
+    }));
+    setDirty(true);
+    toast.success(`Added to ${category}. (wireframe)`);
   };
+
+  const removeImage = (category: ImageCategory, id: string) => {
+    setLibrary((l) => ({
+      ...l,
+      [category]: l[category].filter((x) => x !== id),
+    }));
+    setDirty(true);
+  };
+
+  const totalImages = Object.values(library).reduce((n, arr) => n + arr.length, 0);
 
   return (
     <div className="p-4 md:p-6">
@@ -83,7 +142,7 @@ export function ClientBrand({ client }: { client: Client }) {
               </div>
               <div className="space-y-1.5">
                 <Button size="sm" variant="outline" onClick={() => toast.info("Upload opens a file picker in the real build.")}>
-                  Upload logo
+                  <Upload className="h-3.5 w-3.5" /> Upload logo
                 </Button>
                 <p className="text-[11px] text-muted-foreground">
                   Placeholder initials &mdash; upload the real logo to replace.
@@ -185,6 +244,59 @@ export function ClientBrand({ client }: { client: Client }) {
               ))}
             </CardContent>
           </Card>
+
+          {/* Library images */}
+          <Card>
+            <CardHeader className="flex flex-row items-start justify-between space-y-0">
+              <div>
+                <CardTitle className="text-sm font-medium">Library images</CardTitle>
+                <p className="text-xs text-muted-foreground">
+                  Photography the matrix generator pulls from when building
+                  creatives. Organise by category so the right kind of image
+                  ends up on the right kind of ad.
+                </p>
+              </div>
+              <div className="text-xs text-muted-foreground tabular-nums whitespace-nowrap">
+                {totalImages} image{totalImages === 1 ? "" : "s"}
+              </div>
+            </CardHeader>
+            <CardContent>
+              <Tabs defaultValue="interior">
+                <TabsList>
+                  {CATEGORIES.map((c) => (
+                    <TabsTrigger key={c.key} value={c.key}>
+                      {c.label}
+                      <span className="ml-1.5 rounded-full bg-muted px-1 text-[10px] text-muted-foreground tabular-nums">
+                        {library[c.key].length}
+                      </span>
+                    </TabsTrigger>
+                  ))}
+                </TabsList>
+                {CATEGORIES.map((c) => (
+                  <TabsContent key={c.key} value={c.key} className="space-y-3">
+                    <p className="text-xs text-muted-foreground">{c.description}</p>
+                    <div className="grid gap-3 grid-cols-2 sm:grid-cols-3 md:grid-cols-4">
+                      {library[c.key].map((id) => (
+                        <LibraryTile
+                          key={id}
+                          brand={brand}
+                          onRemove={() => removeImage(c.key, id)}
+                        />
+                      ))}
+                      <button
+                        type="button"
+                        onClick={() => addImage(c.key)}
+                        className="group flex aspect-square flex-col items-center justify-center gap-1 rounded-md border border-dashed bg-muted/20 text-muted-foreground transition-colors hover:border-primary hover:bg-primary/5 hover:text-primary"
+                      >
+                        <Plus className="h-5 w-5" />
+                        <span className="text-[11px] font-medium">Add photo</span>
+                      </button>
+                    </div>
+                  </TabsContent>
+                ))}
+              </Tabs>
+            </CardContent>
+          </Card>
         </div>
 
         {/* Right — sticky preview */}
@@ -252,6 +364,38 @@ function ColorField({
           className="h-8 font-mono text-xs uppercase"
         />
       </div>
+    </div>
+  );
+}
+
+function LibraryTile({
+  brand,
+  onRemove,
+}: {
+  brand: BrandKit;
+  onRemove: () => void;
+}) {
+  return (
+    <div className="group relative aspect-square overflow-hidden rounded-md border bg-muted">
+      {/* Procedural mock — neutral gradient in brand colours with an image icon. */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background: `linear-gradient(135deg, ${brand.accent} 0%, ${brand.secondary} 100%)`,
+          opacity: 0.65,
+        }}
+      />
+      <div className="absolute inset-0 grid place-items-center text-white/80">
+        <ImageIcon className="h-6 w-6" />
+      </div>
+      <button
+        type="button"
+        onClick={onRemove}
+        className="absolute right-1.5 top-1.5 grid h-6 w-6 place-items-center rounded-full bg-background/90 text-destructive opacity-0 transition-opacity hover:bg-background group-hover:opacity-100"
+        aria-label="Remove photo"
+      >
+        <Trash2 className="h-3.5 w-3.5" />
+      </button>
     </div>
   );
 }
