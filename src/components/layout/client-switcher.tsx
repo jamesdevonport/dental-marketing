@@ -7,6 +7,7 @@ import { Check, ChevronsUpDown } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
@@ -42,35 +43,41 @@ export function ClientSwitcher() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-[240px]" align="start">
-        <DropdownMenuLabel className="text-xs text-muted-foreground">
-          Scope
-        </DropdownMenuLabel>
-        <DropdownMenuItem onClick={() => navigate("/dashboard")}>
-          <span className="flex w-full items-center justify-between">
-            <span>All clients</span>
-            {!activeClient ? <Check className="h-4 w-4" /> : null}
-          </span>
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuLabel className="text-xs text-muted-foreground">
-          Clients
-        </DropdownMenuLabel>
-        {clients.map((c) => (
-          <DropdownMenuItem
-            key={c.id}
-            onClick={() => navigate(`/clients/${c.id}/overview`)}
-          >
+        <DropdownMenuGroup>
+          <DropdownMenuLabel className="text-xs text-muted-foreground">
+            Scope
+          </DropdownMenuLabel>
+          <DropdownMenuItem onClick={() => navigate("/dashboard")}>
             <span className="flex w-full items-center justify-between">
-              <span className="flex items-center gap-2">
-                <span className="grid h-5 w-5 place-items-center rounded-sm bg-muted text-[10px] font-semibold">
-                  {c.logoInitials}
-                </span>
-                <span className="truncate">{c.name}</span>
-              </span>
-              {activeClient?.id === c.id ? <Check className="h-4 w-4" /> : null}
+              <span>All clients</span>
+              {!activeClient ? <Check className="h-4 w-4" /> : null}
             </span>
           </DropdownMenuItem>
-        ))}
+        </DropdownMenuGroup>
+        <DropdownMenuSeparator />
+        <DropdownMenuGroup>
+          <DropdownMenuLabel className="text-xs text-muted-foreground">
+            Clients
+          </DropdownMenuLabel>
+          {clients.map((c) => (
+            <DropdownMenuItem
+              key={c.id}
+              onClick={() => navigate(`/clients/${c.id}/overview`)}
+            >
+              <span className="flex w-full items-center justify-between">
+                <span className="flex items-center gap-2">
+                  <span className="grid h-5 w-5 place-items-center rounded-sm bg-muted text-[10px] font-semibold">
+                    {c.logoInitials}
+                  </span>
+                  <span className="truncate">{c.name}</span>
+                </span>
+                {activeClient?.id === c.id ? (
+                  <Check className="h-4 w-4" />
+                ) : null}
+              </span>
+            </DropdownMenuItem>
+          ))}
+        </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={() => navigate("/clients/new")}>
           + New client
