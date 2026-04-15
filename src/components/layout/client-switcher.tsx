@@ -1,7 +1,8 @@
 "use client";
 
-import Link from "next/link";
+import { startTransition } from "react";
 import { usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { Check, ChevronsUpDown } from "lucide-react";
 import {
   DropdownMenu,
@@ -15,11 +16,18 @@ import { Button } from "@/components/ui/button";
 import { clients } from "@/lib/fixtures";
 
 export function ClientSwitcher() {
+  const router = useRouter();
   const pathname = usePathname();
   const match = pathname.match(/^\/clients\/([^/]+)/);
   const activeClientId = match?.[1];
   const activeClient = clients.find((c) => c.id === activeClientId);
   const label = activeClient ? activeClient.name : "All clients";
+
+  const navigate = (href: string) => {
+    startTransition(() => {
+      router.push(href);
+    });
+  };
 
   return (
     <DropdownMenu>
@@ -37,22 +45,22 @@ export function ClientSwitcher() {
         <DropdownMenuLabel className="text-xs text-muted-foreground">
           Scope
         </DropdownMenuLabel>
-        <DropdownMenuItem asChild>
-          <Link href="/dashboard" className="flex items-center justify-between">
+        <DropdownMenuItem onClick={() => navigate("/dashboard")}>
+          <span className="flex w-full items-center justify-between">
             <span>All clients</span>
             {!activeClient ? <Check className="h-4 w-4" /> : null}
-          </Link>
+          </span>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuLabel className="text-xs text-muted-foreground">
           Clients
         </DropdownMenuLabel>
         {clients.map((c) => (
-          <DropdownMenuItem key={c.id} asChild>
-            <Link
-              href={`/clients/${c.id}/overview`}
-              className="flex items-center justify-between"
-            >
+          <DropdownMenuItem
+            key={c.id}
+            onClick={() => navigate(`/clients/${c.id}/overview`)}
+          >
+            <span className="flex w-full items-center justify-between">
               <span className="flex items-center gap-2">
                 <span className="grid h-5 w-5 place-items-center rounded-sm bg-muted text-[10px] font-semibold">
                   {c.logoInitials}
@@ -60,14 +68,12 @@ export function ClientSwitcher() {
                 <span className="truncate">{c.name}</span>
               </span>
               {activeClient?.id === c.id ? <Check className="h-4 w-4" /> : null}
-            </Link>
+            </span>
           </DropdownMenuItem>
         ))}
         <DropdownMenuSeparator />
-        <DropdownMenuItem asChild>
-          <Link href="/clients/new" className="text-sm">
-            + New client
-          </Link>
+        <DropdownMenuItem onClick={() => navigate("/clients/new")}>
+          + New client
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
