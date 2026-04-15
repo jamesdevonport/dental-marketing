@@ -1,12 +1,12 @@
-import { ComingSoon } from "@/components/layout/coming-soon";
+import { PortalApprovals } from "./portal-approvals";
+import { creativesByClient } from "@/lib/fixtures";
+import { CURRENT_PORTAL_CLIENT_ID } from "@/lib/portal";
 
 export const metadata = { title: "Approvals" };
 
 export default function PortalApprovalsPage() {
-  return (
-    <ComingSoon
-      title="Pending approvals (client view)"
-      description="Anything requiring client sign-off. One big card per item: preview + [Approve] / [Request changes]."
-    />
+  const awaiting = (creativesByClient[CURRENT_PORTAL_CLIENT_ID] ?? []).filter(
+    (c) => c.approvalState === "awaiting_client",
   );
+  return <PortalApprovals creatives={awaiting} />;
 }

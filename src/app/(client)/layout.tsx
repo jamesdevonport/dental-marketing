@@ -1,13 +1,15 @@
 import Link from "next/link";
-import { clients } from "@/lib/fixtures";
+import { clientById } from "@/lib/fixtures";
+import { CURRENT_PORTAL_CLIENT_ID } from "@/lib/portal";
 
 export default function ClientPortalLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  // Placeholder: in the real build, the practice signed-in via magic link determines branding.
-  const client = clients[0];
+  // In the real build, the practice signed-in via magic link determines branding.
+  // Wireframe hardcodes via src/lib/portal.ts — swap there to preview another practice.
+  const client = clientById[CURRENT_PORTAL_CLIENT_ID];
 
   const navItems: { href: string; label: string }[] = [
     { href: "/portal", label: "Home" },
